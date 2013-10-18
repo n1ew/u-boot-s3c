@@ -70,7 +70,7 @@ enum DM9000_PHY_mode { DM9000_10MHD = 0, DM9000_100MHD =
 enum DM9000_NIC_TYPE { FASTETHER_NIC = 0, HOMERUN_NIC = 1, LONGRUN_NIC = 2
 };
 
-u16 default_enetaddr[6] = { 0x00, 0x22, 0x12, 0x34, 0x56, 0x90 }; 
+u16 default_enetaddr[6] = { 0x00, 0x0d, 0x3e, 0x26, 0x0a, 0x5b }; 
 /* Structure/enum declaration ------------------------------- */
 typedef struct board_info {
 	u32 runt_length_counter;	/* counter: RX length < 64byte */
