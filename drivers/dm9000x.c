@@ -57,7 +57,7 @@ TODO: Homerun NIC and longrun NIC are not functional, only internal at the
 #define DM9802_NOISE_FLOOR	0x05
 
 /* #define CONFIG_DM9000_DEBUG */
-//#define CONFIG_DM9000_DEBUG
+
 #ifdef CONFIG_DM9000_DEBUG
 #define DM9000_DBG(fmt,args...) printf(fmt ,##args)
 #else				/*  */
