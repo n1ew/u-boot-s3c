@@ -1,7 +1,7 @@
 #!/bin/sh
-make clean
-echo "#define CONFIG_BOOT_MOVINAND" > include/configs/boot_type.h
-make
+make distclean > /dev/null
+make $1 # config target board from first args
+make > /dev/null
 if [ $? -eq 0 ]
 then
 	rm -f u-boot_mmc.bin temp u-boot_256k.bin u-boot_8k.bin x*
@@ -14,3 +14,4 @@ then
 	cat u-boot_256k.bin >> u-boot_mmc.bin
 	cat u-boot_8k.bin >> u-boot_mmc.bin
 fi
+exit 0
