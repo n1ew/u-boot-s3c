@@ -1959,7 +1959,7 @@ smdk_mp_config	:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm s3c64xx-mp smdk_mp samsung s3c64xx-mp
 
 real6410_config	:	unconfig
-	@$(MKCONFIG) $(@:_config=) arm s3c64xx smdk6410 samsung s3c6410 
+	@$(MKCONFIG) $(@:_config=) arm s3c64xx real6410 NULL s3c6410 
 
 SX1_config :		unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm925t sx1
