@@ -32,6 +32,16 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+/* Boot configuration (define only one of next 3) */
+/* Config in file 'boot_type.h' */
+/* This solution is NOT flexible, will be fix in future. */
+/*
+ * #define CONFIG_BOOT_NAND
+ * #define CONFIG_BOOT_MOVINAND
+ * #define CONFIG_BOOT_ONENAND
+ */
+#include "boot_type.h"
+
 /*
  * High Level Configuration Options
  * (easy to change)
@@ -39,7 +49,6 @@
 #define CONFIG_S3C6410		1		/* in a SAMSUNG S3C6410 SoC */
 #define CONFIG_S3C64XX		1		/* in a SAMSUNG S3C64XX Family  */
 #define CONFIG_SMDK6410		1		/* on a SAMSUNG SMDK6410 Board  */
-/*#define CONFIG_SMDK6410_X5A	1*/		/* on a SAMSUNG SMDK6410 OneNAND POP Board */
 
 #define MEMORY_BASE_ADDRESS	0x50000000
 
@@ -57,16 +66,14 @@
 
 #undef CONFIG_USE_IRQ				/* we don't need IRQ/FIQ stuff */
 
-//#define CONFIG_INCLUDE_TEST
-
 #define CONFIG_ZIMAGE_BOOT
 //#define CONFIG_IMAGE_BOOT
-
-#define BOARD_LATE_INIT
+//#define BOARD_LATE_INIT
 
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
+#define CONFIG_AUTO_COMPLETE
 
 /*
  * Architecture magic and machine type
@@ -74,21 +81,18 @@
 #define MACH_TYPE		2990
 #define UBOOT_MAGIC		(0x43090000 | MACH_TYPE)
 
-//#define CONFIG_PM		/* Power Management is enabled */
-
 #define CONFIG_DISPLAY_CPUINFO
 #define CONFIG_DISPLAY_BOARDINFO
 
 #undef CONFIG_SKIP_RELOCATE_UBOOT
-#undef CONFIG_USE_NOR_BOOT
 
 /*
  * Size of malloc() pool
  */
-#define CFG_MALLOC_LEN		(CFG_ENV_SIZE + 1024*1024)
+#define CFG_MALLOC_LEN		(CFG_ENV_SIZE + 1024 * 1024)
 #define CFG_GBL_DATA_SIZE	128	/* size in bytes reserved for initial data */
 
-#define CFG_STACK_SIZE		512*1024
+#define CFG_STACK_SIZE		(512 * 1024)
 
 /*
  * Hardware drivers
@@ -97,8 +101,7 @@
 /*
  * DM9000 Ethernet
  */
-#define CONFIG_NET_MULTI	1
-#define CONFIG_DRIVER_DM9000    1
+#define CONFIG_DRIVER_DM9000    1	/* we have a DM9000 on-board	*/
 #define CONFIG_DM9000_BASE      0x18000300
 #define CONFIG_DM9000_USE_16BIT
 #define DM9000_IO               CONFIG_DM9000_BASE
@@ -107,15 +110,18 @@
 /*
  * select serial console configuration
  */
-#define CONFIG_SERIAL1          1	/* we use SERIAL 1 on REAL6410 */
+#define CONFIG_SERIAL1          1	/* we use SERIAL 1 on REAL6410	*/
 
 #define CFG_HUSH_PARSER			/* use "hush" command parser	*/
 #ifdef CFG_HUSH_PARSER
 #define CFG_PROMPT_HUSH_PS2	"> "
 #endif
 
+#if defined(CONFIG_AUTO_COMPLETE)
+#undef CONFIG_CMDLINE_EDITING		/* CONFIG_AUTO_COMPLETE not work enabled */
+#else
 #define CONFIG_CMDLINE_EDITING
-//#define CONFIG_AUTO_COMPLETE
+#endif
 
 #define CONFIG_S3C64XX_I2C		/* this board has H/W I2C */
 #ifdef CONFIG_S3C64XX_I2C
@@ -137,29 +143,22 @@
 /***********************************************************
  * Command definition
  ***********************************************************/
-#define CONFIG_COMMANDS (\
+#define CONFIG_COMMANDS \
 			(CONFIG_CMD_DFL	| \
 			CFG_CMD_CACHE	| \
 			CFG_CMD_REGINFO	| \
-			CFG_CMD_ENV	| \
 			CFG_CMD_NAND	| \
-			CFG_CMD_MOVINAND| \
-			CFG_CMD_MMC	| \
-			CFG_CMD_NET	| \
-			CFG_CMD_NFS	| \
-			CFG_CMD_DHCP	| \
+			/*CFG_CMD_MOVINAND|*/ \
+			/*CFG_CMD_ONENAND|*/ \
 			CFG_CMD_PING	| \
 			CFG_CMD_USB	| \
+			CFG_CMD_FAT	| \
 			CFG_CMD_DATE	| \
 			CFG_CMD_ECHO	| \
 		 	CFG_CMD_RUN	| \
-			CFG_CMD_ELF ) \
-			& ~(CFG_CMD_AUTOSCRIPT	| \
-				CFG_CMD_BOOTD	| \
-				CFG_CMD_IMI	| \
-				CFG_CMD_CONSOLE	| \
-				CFG_CMD_DOCG3P3 | \
-				CFG_CMD_EEPROM))
+			CFG_CMD_ELF) \
+			& ~(CFG_CMD_IMLS| \
+			    CFG_CMD_FLASH)
 
 /* this must be included AFTER the definition of CONFIG_COMMANDS (if any) */
 #include <cmd_confdefs.h>
@@ -177,19 +176,19 @@
 /*
  * Miscellaneous configurable options
  */
-#define CFG_LONGHELP				/* undef to save memory	*/
-#define CFG_PROMPT		"U-Boot > "	/* Monitor Command Prompt */
-#define CFG_CBSIZE		256		/* Console I/O Buffer Size */
-#define CFG_PBSIZE		(CFG_CBSIZE+sizeof(CFG_PROMPT)+16)	/* Print Buffer Size */
-#define CFG_MAXARGS		16		/* max number of command args */
-#define CFG_BARGSIZE		CFG_CBSIZE	/* Boot Argument Buffer Size */
+#define CFG_LONGHELP				/* undef to save memory		*/
+#define CFG_PROMPT		"U-Boot > "	/* Monitor Command Prompt	*/
+#define CFG_CBSIZE		256		/* Console I/O Buffer Size	*/
+#define CFG_PBSIZE	(CFG_CBSIZE+sizeof(CFG_PROMPT)+16)	/* Print Buffer Size	*/
+#define CFG_MAXARGS		16		/* max number of command args	*/
+#define CFG_BARGSIZE		CFG_CBSIZE	/* Boot Argument Buffer Size	*/
 
-#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS		/* memtest works on */
-#define CFG_MEMTEST_END		MEMORY_BASE_ADDRESS + 0x7e00000	/* 126 MB in DRAM */
-
-#undef CFG_CLKS_IN_HZ		/* everything, incl board info, in Hz */
+#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS		/* memtest works on	*/
+#define CFG_MEMTEST_END	(MEMORY_BASE_ADDRESS + 0x7e00000)	/* 126 MB in DRAM	*/
 
 #define CFG_LOAD_ADDR		MEMORY_BASE_ADDRESS	/* default load address	*/
+
+#undef CFG_CLKS_IN_HZ		/* everything, incl board info, in Hz */
 
 /* the PWM TImer 4 uses a counter of 15625 for 10 ms, so we need */
 /* it to wrap 100 times (total 1562500) to get 1 sec. */
@@ -205,8 +204,8 @@
  */
 #define CONFIG_STACKSIZE	0x40000		/* regular stack 256KB */
 #ifdef CONFIG_USE_IRQ
-#define CONFIG_STACKSIZE_IRQ	(4*1024)	/* IRQ stack */
-#define CONFIG_STACKSIZE_FIQ	(4*1024)	/* FIQ stack */
+#define CONFIG_STACKSIZE_IRQ	(4 * 1024)	/* IRQ stack */
+#define CONFIG_STACKSIZE_FIQ	(4 * 1024)	/* FIQ stack */
 #endif
 
 //#define CONFIG_CLK_800_133_66
@@ -369,22 +368,16 @@
 #define PHYS_SDRAM_1		MEMORY_BASE_ADDRESS /* SDRAM Bank #1 */
 #define PHYS_SDRAM_1_SIZE	0x10000000 /* 256 MB */
 
-#define CFG_FLASH_BASE		0x00000000
-
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-#define CFG_MAX_FLASH_BANKS	0	/* max number of memory banks */
-#define CFG_MAX_FLASH_SECT	1024
-#define CONFIG_AMD_LV800
-#define PHYS_FLASH_SIZE		0x100000
-
-/* timeout values are in ticks */
-#define CFG_FLASH_ERASE_TOUT	(5 * CFG_HZ) /* Timeout for Flash Erase */
-#define CFG_FLASH_WRITE_TOUT	(5 * CFG_HZ) /* Timeout for Flash Write */
+#define CFG_NO_FLASH		1	/* This board has NO flash */
 
 #define CFG_ENV_ADDR		0
 #define CFG_ENV_SIZE		0x4000	/* Total Size of Environment Sector */
+
+#define CFG_ENV_OFFSET		0x3c000	/* This MUST be larger than U-Boot image size,
+					   but NOT? larger than '0x40000' */
 
 /*
  * REAL6400 board specific data
@@ -396,73 +389,60 @@
 
 /* base address for uboot */
 #ifdef CONFIG_ENABLE_MMU
-#define CFG_UBOOT_BASE		0xc7e00000
+#define CFG_UBOOT_BASE		(0xc7e00000)
 #else
-#define CFG_UBOOT_BASE		0x57e00000
+#define CFG_UBOOT_BASE		(0x57e00000)
 #endif
-#define CFG_PHY_UBOOT_BASE	MEMORY_BASE_ADDRESS + 0x7e00000
-
-#define CFG_ENV_OFFSET		0x40000
+#define CFG_PHY_UBOOT_BASE	(MEMORY_BASE_ADDRESS + 0x7e00000)
 
 /* NAND configuration */
 #define CFG_MAX_NAND_DEVICE     1
 #define CFG_NAND_BASE           (0x70200010)
+#define CFG_NAND_HWECC   
+#define CFG_NAND_LARGEPAGE_SAVEENV
 #define NAND_MAX_CHIPS          1
+/*#define CONFIG_NAND_BL1_8BIT_ECC*/
+/*#define CFG_NAND_FLASH_BBT*/
 
 #define NAND_DISABLE_CE()	(NFCONT_REG |= (1 << 1))
 #define NAND_ENABLE_CE()	(NFCONT_REG &= ~(1 << 1))
 #define NF_TRANSRnB()		do { while(!(NFSTAT_REG & (1 << 0))); } while(0)
 
-#define CFG_NAND_SKIP_BAD_DOT_I	1  /* ".i" read skips bad blocks   */
+#define CFG_NAND_SKIP_BAD_DOT_I	1	/* ".i" read skips bad blocks */
 #define	CFG_NAND_WP		1
-#define CFG_NAND_YAFFS_WRITE	1  /* support yaffs write */
+#define CFG_NAND_YAFFS_WRITE	1	/* support yaffs write */
 
-/* Boot configuration (define only one of next 3) */
-/*
- * #define CONFIG_BOOT_NOR
- * #define CONFIG_BOOT_NAND
- * #define CONFIG_BOOT_MOVINAND
- * #define CONFIG_BOOT_ONENAND
- * #define CONFIG_BOOT_ONENAND_IROM
- */
-/* boot type will be config in boot_type.h */
-#include "boot_type.h"
-
-#define	CONFIG_BB
-#define	CONFIG_NAND
-//#define CONFIG_NAND_BL1_8BIT_ECC
-//#define CONFIG_ONENAND
-#define CONFIG_MOVINAND
-
-#define CONFIG_MMC		1
+/* MMC configuration */
 #define CFG_MMC_BASE		(0xf0000000)
 #define CFG_MAX_MMC_DEVICE	1
 
+/* OneNAND configuration */
+#define CFG_ONENAND_BASE 	(0x70100000)
+#define CFG_MAX_ONENAND_DEVICE	1
+
+//#define CONFIG_BB			/* Bulk burn */
 #define CONFIG_DOS_PARTITION
 #define CONFIG_SUPPORT_VFAT
 
 #define CONFIG_USB_OHCI
 #define CONFIG_USB_STORAGE
 
-
-/* Settings as above boot configuration */
+/* Settings boot configuration */
 #if defined(CONFIG_BOOT_NAND)
+#define	CONFIG_NAND		1
 #define CFG_ENV_IS_IN_NAND
-#define CFG_NAND_LARGEPAGE_SAVEENV
-#define CFG_NAND_HWECC   
-//#define CFG_NAND_FLASH_BBT
-//#define CONFIG_BOOTCOMMAND	"nand read c0008000 40000 3c0000 ; bootm c0008000"
+/*#define CONFIG_BOOTCOMMAND	"nand read c0008000 40000 3c0000 ; bootm c0008000"*/
 #elif defined(CONFIG_BOOT_MOVINAND)
+#define CONFIG_MOVINAND		1
+#define CONFIG_MMC		1
 #define CFG_ENV_IS_IN_MOVINAND
-#define CFG_NAND_HWECC
-//#define CONFIG_BOOTCOMMAND	"movi read zImage c0008000 ; bootm c0008000"
-#elif defined(CONFIG_BOOT_ONENAND) || defined(CONFIG_BOOT_ONENAND_IROM)
-#define CFG_ONENAND_BASE 	(0x70100000)
-#define CFG_MAX_ONENAND_DEVICE	1
+/*#define CONFIG_BOOTCOMMAND	"movi read zImage c0008000 ; bootm c0008000"*/
+#elif defined(CONFIG_BOOT_ONENAND)
+#define CONFIG_ONENAND		1
 #define CFG_ENV_IS_IN_ONENAND
-//#define CONFIG_BOOTCOMMAND	"onenand read c0008000 40000 1c0000 ; bootm c0008000"
+/*#define CONFIG_BOOTCOMMAND	"onenand read c0008000 40000 1c0000 ; bootm c0008000"*/
 #else
-# error Define one of CONFIG_BOOT_{NAND | MOVINAND | ONENAND | ONENAND_IROM}
+# error Define one of CONFIG_BOOT_{NAND | MOVINAND | ONENAND}
 #endif
 
 /*#define CONFIG_BOOTARGS	"console=ttySAC0,115200"*/
@@ -474,24 +454,35 @@
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"bootcmd=run nfsboot\0" \
-        "bootargs=\0" \
-        "console=ttySAC0\0" \
-        "ipaddr=192.168.0.169\0" \
-        "netmask=255.255.255.0\0" \
-        "gatewayip=192.168.0.1\0" \
-        "serverip=192.168.0.101\0" \
-        "kernel_image=zImage\0" \
-        "kernel_addr=0xc0008000\0" \
-        "initrd_image=initrd.img\0" \
-        "initrd_high=0xffffffff\0" \
-        "tftpcmd=tftp ${kernel_addr} ${kernel_image}\0" \
-        "nfsboot=run nfsargs; run tftpcmd; bootm ${kernel_addr}\0" \
-        "nfsargs=setenv bootargs console=${console},${baudrate} " \
-                "root=/dev/nfs nfsroot=${serverip}:${nfsroot},v3,tcp " \
-                "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:" \
-                "${hostname}:${netdev}:off\0" \
-        "nfsroot=/home/niew/devel/wheezy-real6410\0" \
-        "nandcmd=nand read ${kernel_addr} 40000 3c0000; bootm c0008000\0" \
-        "movicmd=movi read ${kernel_image} c0008000; bootm c0008000\0" \
-        "onenandcmd=onenand read c0008000 40000 1c0000; bootm c0008000\0"
+	"bootargs=\0" \
+	"console=ttySAC0\0" \
+	"video=fb:WX4300F\0" \
+	"hostname=real6410\0" \
+	"netdev=eth0\0" \
+	"ethaddr=00:22:12:34:56:90\0" \
+	"ipaddr=192.168.0.156\0" \
+	"netmask=255.255.255.0\0" \
+	"gatewayip=192.168.0.1\0" \
+	"serverip=192.168.0.101\0" \
+	"loadaddr=0xc0008000\0" \
+	"uboot_image=u-boot.real6410\0" \
+	"kernel_image=zImage\0" \
+	"kernel_addr=0xc0008000\0" \
+	"initrd_image=initrd.img\0" \
+	"initrd_high=0xffffffff\0" \
+	"tftpcmd=tftp ${kernel_addr} ${kernel_image}\0" \
+	"nfsboot=run nfsargs; run tftpcmd; bootm ${kernel_addr}\0" \
+	"nfsargs=setenv bootargs console=${console},${baudrate} noinitrd " \
+		"root=/dev/nfs nfsroot=${serverip}:${nfsroot} " \
+		"ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:" \
+		"${hostname}:${netdev}:off\0" \
+	"nfsroot=/home/niew/devel/wheezy-real6410\0" \
+	"nandbootcmd=nand read ${kernel_addr} 40000 3c0000; bootm c0008000\0" \
+	"movibootcmd=movi read ${kernel_image} c0008000; bootm c0008000\0" \
+	"onenandbootcmd=onenand read c0008000 40000 1c0000; bootm c0008000\0" \
+	"upgradecmd=tftp ${loadaddr} ${uboot_image} ; " \
+		"nand erase 0 0x3c000 ; " \
+		"nand write ${loadaddr} 0 $filesize ; " \
+		"nand read 0xc2008000 0 $filesize ; " \
+		"cmp.b ${loadaddr} 0xc2008000 $filesize\0"
 #endif	/* __CONFIG_H */
