@@ -479,9 +479,11 @@
 	"nandbootcmd=nand read ${kernel_addr} 40000 3c0000; bootm c0008000\0" \
 	"movibootcmd=movi read ${kernel_image} c0008000; bootm c0008000\0" \
 	"onenandbootcmd=onenand read c0008000 40000 1c0000; bootm c0008000\0" \
-	"upgradecmd=tftp ${loadaddr} ${uboot_image} ; " \
-		"nand erase 0 0x3c000 ; " \
-		"nand write ${loadaddr} 0 $filesize ; " \
-		"nand read 0xc2008000 0 $filesize ; " \
-		"cmp.b ${loadaddr} 0xc2008000 $filesize\0"
+	"upgradecmd=tftp ${loadaddr} ${uboot_image} && " \
+		"setenv uboot_size $filesize ; " \
+		"nand erase 0 0x3c000 && sleep 3 ; " \
+		"nand write ${loadaddr} 0 ${uboot_size} && sleep 3 ; " \
+		"nand read 0xc2008000 0 ${uboot_size} ; " \
+		"cmp.b ${loadaddr} 0xc2008000 ${uboot_size} ; echo ; " \
+		"echo U-Boot upgraded. Please reset the board manually!\0"
 #endif	/* __CONFIG_H */
