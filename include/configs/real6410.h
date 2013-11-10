@@ -55,7 +55,7 @@
 /* input clock of PLL */
 #define CONFIG_SYS_CLK_FREQ	12000000	/* REAL6410 has 12MHz input clock */
 
-#define CONFIG_ENABLE_MMU
+#undef CONFIG_ENABLE_MMU
 #ifdef CONFIG_ENABLE_MMU
 #define virt_to_phys(x)	virt_to_phy_smdk6410(x)
 #else
