@@ -26,7 +26,7 @@
  */
 
 #include <common.h>
-#include <regs.h>
+#include <s3c6410.h>
 
 /* ------------------------------------------------------------------------- */
 #define CS8900_Tacs	(0x0)	// 0clk		address set-up
@@ -62,10 +62,6 @@ int board_init(void)
 	gd->bd->bi_arch_number = MACH_TYPE;
 	gd->bd->bi_boot_params = (PHYS_SDRAM_1+0x100);
 
-#if 0
-	icache_enable();
-	dcache_enable();
-#endif
 	return 0;
 }
 
@@ -79,102 +75,11 @@ int dram_init(void)
 	return 0;
 }
 
-/*
- *Here we configure the PMU(AXP181) through iic.
- *Figo (sagres_2004@163.com)
- */
-void pmu_axp181_init(void)
-{
-	uchar buffer = 0xff;
-	//trun on sw1/sw2/LDO4/LDO5
-	if(i2c_write (0x16, 0x10, 1, &buffer, 1) != 0)
-	{
-		printf("Write PMU(AXP181) failed\n");
-		return;
-	}
-	//todo:configure more ...
-}
-
-/*
- *Here we turn on the GPRS through pull low GPIO C2.
- *Figo (sagres_2004@163.com)
- */
-void gprs_init(void)
-{
-#if 1
-	GPCCON_REG &= ~(0xf000000);
-	GPCCON_REG |= 0x1000000;
-	GPCPUD_REG &= ~(0x3000);
-	GPCPUD_REG |= 0x2000;
-	GPCDAT_REG &= ~(0x40);
-	GPCDAT_REG |= 0x40;
-#else
-	GPCCON_REG &= ~(0xf00);
-	GPCCON_REG |= 0x100;
-	GPCPUD_REG &= ~(0x30);
-	GPCPUD_REG |= 0x20;
-	GPCDAT_REG &= ~(0x4);
-	GPCDAT_REG |= 0x4;
-#endif
-}
-
-#ifdef BOARD_LATE_INIT
-#if defined(CONFIG_BOOT_NAND)
-int board_late_init (void)
-{
-	uint *magic = (uint*)(PHYS_SDRAM_1);
-	char boot_cmd[100];
-	
-	gprs_init();
-//	pmu_axp181_init();
-	if ((0x24564236 == magic[0]) && (0x20764316 == magic[1])) {
-		sprintf(boot_cmd, "nand erase 0 40000;nand write %08x 0 40000", PHYS_SDRAM_1 + 0x8000);
-		magic[0] = 0;
-		magic[1] = 0;
-		printf("\nready for self-burning U-Boot image\n\n");
-		setenv("bootdelay", "0");
-		setenv("bootcmd", boot_cmd);
-	}
-
-	return 0;
-}
-#elif defined(CONFIG_BOOT_MOVINAND)
-int board_late_init (void)
-{
-	uint *magic = (uint*)(PHYS_SDRAM_1);
-	char boot_cmd[100];
-	int hc;
-
-	gprs_init();
-//	pmu_axp181_init();
-	hc = (magic[2] & 0x1) ? 1 : 0;
-
-	if ((0x24564236 == magic[0]) && (0x20764316 == magic[1])) {
-		sprintf(boot_cmd, "movi init %d %d;movi write u-boot %08x", magic[3], hc, PHYS_SDRAM_1 + 0x8000);
-		magic[0] = 0;
-		magic[1] = 0;
-		printf("\nready for self-burning U-Boot image\n\n");
-		setenv("bootdelay", "0");
-		setenv("bootcmd", boot_cmd);
-	}
-
-	return 0;
-}
-#else
-int board_late_init (void)
-{
-	gprs_init();
-//	pmu_axp181_init();
-	return 0;
-}
-#endif
-#endif
-
 #ifdef CONFIG_DISPLAY_BOARDINFO
 int checkboard(void)
 {
 	printf("Board:   REAL6410\n");
-	return (0);
+	return 0;
 }
 #endif
 
