@@ -34,11 +34,7 @@ SECTIONS
 	{
 	  cpu/s3c64xx/start.o	(.text)
 	  cpu/s3c64xx/s3c6410/cpu_init.o	(.text)
-	  cpu/s3c64xx/onenand_cp.o	(.text)
-	  cpu/s3c64xx/nand_cp.o	(.text)
-	  cpu/s3c64xx/movi.o (.text)
 	  *(.text)
-	  lib_arm/div0.o
 	}
 
 	. = ALIGN(4);
