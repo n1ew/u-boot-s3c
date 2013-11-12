@@ -55,24 +55,24 @@
 /* input clock of PLL */
 #define CONFIG_SYS_CLK_FREQ	12000000	/* REAL6410 has 12MHz input clock */
 
-#undef CONFIG_ENABLE_MMU
+/*#undef CONFIG_ENABLE_MMU
 #ifdef CONFIG_ENABLE_MMU
 #define virt_to_phys(x)	virt_to_phy_smdk6410(x)
 #else
 #define virt_to_phys(x)	(x)
-#endif
+#endif*/
 
 #define CONFIG_MEMORY_UPPER_CODE
 
 #undef CONFIG_USE_IRQ				/* we don't need IRQ/FIQ stuff */
 
-#define CONFIG_ZIMAGE_BOOT
+//#define CONFIG_ZIMAGE_BOOT
 //#define CONFIG_IMAGE_BOOT
 
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
-#define CONFIG_AUTO_COMPLETE
+//#define CONFIG_AUTO_COMPLETE
 
 /*
  * Architecture magic and machine type
@@ -463,10 +463,10 @@
 	"netmask=255.255.255.0\0" \
 	"gatewayip=192.168.0.1\0" \
 	"serverip=192.168.0.101\0" \
-	"loadaddr=0xc0008000\0" \
+	"loadaddr=0x50018000\0" \
 	"uboot_image=u-boot.real6410\0" \
-	"kernel_image=zImage\0" \
-	"kernel_addr=0xc0008000\0" \
+	"kernel_image=uImage\0" \
+	"kernel_addr=0x50018000\0" \
 	"initrd_image=initrd.img\0" \
 	"initrd_high=0xffffffff\0" \
 	"tftpcmd=tftp ${kernel_addr} ${kernel_image}\0" \
@@ -476,14 +476,14 @@
 		"ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:" \
 		"${hostname}:${netdev}:off\0" \
 	"nfsroot=/home/niew/devel/wheezy-real6410\0" \
-	"nandbootcmd=nand read ${kernel_addr} 40000 3c0000; bootm c0008000\0" \
-	"movibootcmd=movi read ${kernel_image} c0008000; bootm c0008000\0" \
-	"onenandbootcmd=onenand read c0008000 40000 1c0000; bootm c0008000\0" \
+	"nandbootcmd=nand read ${kernel_addr} 40000 3c0000; bootm ${kernel_addr}\0" \
+	"movibootcmd=movi read ${kernel_image} c0008000; bootm ${kernel_addr}\0" \
+	"onenandbootcmd=onenand read ${kernel_addr} 40000 1c0000; bootm ${kernel_addr}\0" \
 	"upgradecmd=tftp ${loadaddr} ${uboot_image} && " \
 		"setenv uboot_size $filesize ; " \
 		"nand erase 0 0x3c000 && sleep 3 ; " \
 		"nand write ${loadaddr} 0 ${uboot_size} && sleep 3 ; " \
-		"nand read 0xc2008000 0 ${uboot_size} ; " \
-		"cmp.b ${loadaddr} 0xc2008000 ${uboot_size} ; echo ; " \
+		"nand read 0x52008000 0 ${uboot_size} ; " \
+		"cmp.b ${loadaddr} 0x52008000 ${uboot_size} ; echo ; " \
 		"echo U-Boot upgraded. Please reset the board manually!\0"
 #endif	/* __CONFIG_H */
