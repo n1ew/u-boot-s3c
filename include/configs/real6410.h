@@ -59,9 +59,6 @@
 
 #undef CONFIG_USE_IRQ				/* we don't need IRQ/FIQ stuff */
 
-#define CONFIG_ZIMAGE_BOOT
-#define CONFIG_IMAGE_BOOT
-
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
