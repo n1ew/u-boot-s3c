@@ -55,24 +55,17 @@
 /* input clock of PLL */
 #define CONFIG_SYS_CLK_FREQ	12000000	/* REAL6410 has 12MHz input clock */
 
-/*#undef CONFIG_ENABLE_MMU
-#ifdef CONFIG_ENABLE_MMU
-#define virt_to_phys(x)	virt_to_phy_smdk6410(x)
-#else
-#define virt_to_phys(x)	(x)
-#endif*/
-
 #define CONFIG_MEMORY_UPPER_CODE
 
 #undef CONFIG_USE_IRQ				/* we don't need IRQ/FIQ stuff */
 
-//#define CONFIG_ZIMAGE_BOOT
-//#define CONFIG_IMAGE_BOOT
+#define CONFIG_ZIMAGE_BOOT
+#define CONFIG_IMAGE_BOOT
 
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
-//#define CONFIG_AUTO_COMPLETE
+#define CONFIG_AUTO_COMPLETE
 
 /*
  * Architecture magic and machine type
