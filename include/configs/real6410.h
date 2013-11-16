@@ -471,7 +471,7 @@
 	"upgradecmd=tftp ${loadaddr} ${uboot_image} && " \
 		"setenv uboot_size $filesize ; " \
 		"nand erase 0 0x3c000 && sleep 3 ; " \
-		"nand write ${loadaddr} 0 ${uboot_size} && sleep 3 ; " \
+		"nand write ${loadaddr} 0 0x3c000 && sleep 3 ; " \
 		"nand read 0x52008000 0 ${uboot_size} ; " \
 		"cmp.b ${loadaddr} 0x52008000 ${uboot_size} ; echo ; " \
 		"echo U-Boot upgraded. Please reset the board manually!\0"
