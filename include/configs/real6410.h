@@ -65,7 +65,6 @@
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
-#define CONFIG_AUTO_COMPLETE
 
 /*
  * Architecture magic and machine type
@@ -110,9 +109,9 @@
 #endif
 
 #if defined(CONFIG_AUTO_COMPLETE)
-#undef CONFIG_CMDLINE_EDITING		/* CONFIG_AUTO_COMPLETE not work enabled */
+#undef CONFIG_CMDLINE_EDITING		/* AUTO_COMPLETE not work if enabled */
 #else
-#define CONFIG_CMDLINE_EDITING
+#define CONFIG_CMDLINE_EDITING		/* fallback */
 #endif
 
 #define CONFIG_S3C64XX_I2C		/* this board has H/W I2C */
