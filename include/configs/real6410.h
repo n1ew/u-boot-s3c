@@ -139,8 +139,8 @@
 			/*CFG_CMD_MOVINAND|*/ \
 			/*CFG_CMD_ONENAND|*/ \
 			CFG_CMD_PING	| \
-			CFG_CMD_USB	| \
-			CFG_CMD_FAT	| \
+			/*CFG_CMD_USB	|*/ \
+			/*CFG_CMD_FAT	|*/ \
 			CFG_CMD_DATE	| \
 			CFG_CMD_ECHO	| \
 		 	CFG_CMD_RUN	| \
@@ -409,11 +409,11 @@
 #define CFG_MAX_ONENAND_DEVICE	1
 
 //#define CONFIG_BB			/* Bulk burn */
-#define CONFIG_DOS_PARTITION
-#define CONFIG_SUPPORT_VFAT
+//#define CONFIG_DOS_PARTITION
+//#define CONFIG_SUPPORT_VFAT
 
-#define CONFIG_USB_OHCI
-#define CONFIG_USB_STORAGE
+//#define CONFIG_USB_OHCI
+//#define CONFIG_USB_STORAGE
 
 /* Settings boot configuration */
 #if defined(CONFIG_BOOT_NAND)
