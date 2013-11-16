@@ -111,13 +111,6 @@
 #define CONFIG_CMDLINE_EDITING		/* fallback */
 #endif
 
-#define CONFIG_S3C64XX_I2C		/* this board has H/W I2C */
-#ifdef CONFIG_S3C64XX_I2C
-#define CONFIG_HARD_I2C		1
-#define CFG_I2C_SPEED		100000
-#define CFG_I2C_SLAVE		0xFE
-#endif
-
 /***********************************************************
  * RTC
  ***********************************************************/
