@@ -354,11 +354,8 @@
  */
 #define CFG_NO_FLASH		1	/* This board has NO flash */
 
-#define CFG_ENV_ADDR		0
 #define CFG_ENV_SIZE		0x4000	/* Total Size of Environment Sector */
-
-#define CFG_ENV_OFFSET		0x3c000	/* This MUST be larger than U-Boot image size,
-					   but NOT? larger than '0x40000' */
+#define CFG_ENV_OFFSET		0x3c000	/* Must be? set to 0x3c000 */
 
 /*
  * REAL6400 board specific data
