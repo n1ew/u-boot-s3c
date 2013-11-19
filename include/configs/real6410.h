@@ -390,6 +390,9 @@
 #define	CFG_NAND_WP		1
 #define CFG_NAND_YAFFS_WRITE	1	/* support yaffs write */
 
+#define CONFIG_MTD_NAND_VERIFY_WRITE    1
+#define CONFIG_MTD_NAND_ECC_JFFS2       1
+
 /* MMC configuration */
 #define CFG_MMC_BASE		(0xf0000000)
 #define CFG_MAX_MMC_DEVICE	1
