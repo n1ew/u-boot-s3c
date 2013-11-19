@@ -425,46 +425,42 @@
 # error Define one of CONFIG_BOOT_{NAND | MOVINAND | ONENAND}
 #endif
 
-/*#define CONFIG_BOOTARGS	"console=ttySAC0,115200"*/
-/*#define CONFIG_ETHADDR	00:22:12:34:56:90*/
-/*#define CONFIG_NETMASK	255.255.255.0*/
-/*#define CONFIG_IPADDR		192.168.0.102*/
-/*#define CONFIG_SERVERIP	192.168.0.101*/
-/*#define CONFIG_GATEWAYIP	192.168.0.1*/
-
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"bootcmd=run nfsboot\0" \
+	"bootcmd=\0" \
 	"bootargs=\0" \
 	"console=ttySAC0\0" \
 	"video=fb:WX4300F\0" \
-	"hostname=real6410\0" \
-	"netdev=eth0\0" \
-	"ethaddr=00:22:12:34:56:90\0" \
+	"optargs=noinitrd\0" \
 	"ipaddr=192.168.0.156\0" \
 	"netmask=255.255.255.0\0" \
 	"gatewayip=192.168.0.1\0" \
 	"serverip=192.168.0.101\0" \
+	"autoconf=off\0" \
 	"loadaddr=0x50018000\0" \
+	"bootfile=uImage\0" \
 	"uboot_image=u-boot.real6410\0" \
-	"kernel_image=uImage\0" \
-	"kernel_addr=0x50018000\0" \
 	"initrd_image=initrd.img\0" \
+	"initrd_addr=0x51000000\0" \
 	"initrd_high=0xffffffff\0" \
-	"tftpcmd=tftp ${kernel_addr} ${kernel_image}\0" \
-	"nfsboot=run nfsargs; run tftpcmd; bootm ${kernel_addr}\0" \
-	"nfsargs=setenv bootargs console=${console},${baudrate} noinitrd " \
-		"root=/dev/nfs nfsroot=${serverip}:${nfsroot} " \
+	"nfsboot=run nfsargs; tftp ${loadaddr} ${bootfile} ; bootm\0" \
+	"nfsargs=setenv bootargs console=${console},${baudrate}n8 " \
+		"${optargs} video=${video} " \
+		"root=/dev/nfs nfsroot=${serverip}:${rootpath} " \
 		"ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:" \
-		"${hostname}:${netdev}:off\0" \
-	"nfsroot=/home/niew/devel/wheezy-real6410\0" \
-	"nandbootcmd=nand read ${kernel_addr} 40000 3c0000; bootm ${kernel_addr}\0" \
-	"movibootcmd=movi read ${kernel_image} c0008000; bootm ${kernel_addr}\0" \
-	"onenandbootcmd=onenand read ${kernel_addr} 40000 1c0000; bootm ${kernel_addr}\0" \
+		"${hostname}:${device}:${autoconf}:${dns0}:${dns1}\0" \
+	"rootpath=/home/niew/devel/wheezy-real6410\0" \
+	"nandboot=nand read ${loadaddr} 100000 3c0000 ; bootm\0" \
+	"nandargs=setenv bootargs console=${console},${baudrate}n8 " \
+		"${optargs} video=${video} root=${rootfs} " \
+		"rootfstype=${rootfstype} mtdparts=${mtdparts}\0" \
+	"rootfs=/dev/mtdblock2\0" \
+	"rootfstype=jffs2\0" \
+	"mtdparts=nand:1m(uboot)ro,4m(kernel),-(rootfs)\0" \
 	"upgradecmd=tftp ${loadaddr} ${uboot_image} && " \
 		"setenv uboot_size $filesize ; " \
-		"nand erase 0 0x3c000 && sleep 3 ; " \
-		"nand write ${loadaddr} 0 0x3c000 && sleep 3 ; " \
+		"nand erase 0 0x40000 && sleep 3 ; " \
+		"nand write ${loadaddr} 0 0x40000 && sleep 3 ; " \
 		"nand read 0x52008000 0 ${uboot_size} ; " \
-		"cmp.b ${loadaddr} 0x52008000 ${uboot_size} ; echo ; " \
+		"cmp.b $fileaddr 0x52008000 ${uboot_size} ; echo ; " \
 		"echo U-Boot upgraded. Please reset the board manually!\0"
 #endif	/* __CONFIG_H */
