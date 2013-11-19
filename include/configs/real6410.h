@@ -196,7 +196,7 @@
 //#define CONFIG_CLK_400_100_50
 //#define CONFIG_CLK_OTHERS
 
-#define CONFIG_CLKSRC_CLKUART
+//#define CONFIG_CLKSRC_CLKUART
 
 #define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | pdiv<<8 | sdiv)
 
