@@ -395,8 +395,8 @@
 #define CFG_MAX_MMC_DEVICE	1
 
 /* OneNAND configuration */
-#define CFG_ONENAND_BASE 	(0x70100000)
-#define CFG_MAX_ONENAND_DEVICE	1
+/*#define CFG_ONENAND_BASE 	(0x70100000)*/
+/*#define CFG_MAX_ONENAND_DEVICE	1*/
 
 //#define CONFIG_DOS_PARTITION
 //#define CONFIG_SUPPORT_VFAT
