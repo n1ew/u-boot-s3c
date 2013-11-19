@@ -96,7 +96,7 @@ int nandll_read_blocks (ulong dst_addr, ulong size, int large_block)
 		page_shift = 11;
 
         /* Read pages */
-        for (i = 0; i < (0x3c000>>page_shift); i++, buf+=(1<<page_shift)) {
+        for (i = 0; i < (size>>page_shift); i++, buf+=(1<<page_shift)) {
                 nandll_read_page(buf, i, large_block);
         }
 
@@ -121,12 +121,7 @@ int copy_uboot_to_ram (void)
 	if (id > 0x80)
 		large_block = 1;
 
-	/* read NAND Block.
-	 * 128KB ->240KB because of U-Boot size increase. by scsuh
-	 * So, read 0x3c000 bytes not 0x20000(128KB).
-	 */
-	return nandll_read_blocks(CFG_PHY_UBOOT_BASE, 0x3c000, large_block);
+	/* read NAND Block */
+	return nandll_read_blocks(CFG_PHY_UBOOT_BASE, CFG_ENV_OFFSET, large_block);
 }
-
 #endif
-
