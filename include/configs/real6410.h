@@ -376,9 +376,9 @@
 /* NAND configuration */
 #define CFG_MAX_NAND_DEVICE     1
 #define CFG_NAND_BASE           (0x70200010)
-#define CFG_NAND_HWECC   
-#define CFG_NAND_LARGEPAGE_SAVEENV
 #define NAND_MAX_CHIPS          1
+//#define CFG_NAND_HWECC
+#define CFG_NAND_LARGEPAGE_SAVEENV
 /*#define CONFIG_NAND_BL1_8BIT_ECC*/
 /*#define CFG_NAND_FLASH_BBT*/
 
