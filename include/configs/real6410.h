@@ -418,37 +418,37 @@
 	"bootargs=\0" \
 	"console=ttySAC0\0" \
 	"video=fb:WX4300F\0" \
-	"optargs=noinitrd\0" \
+	"optargs=rootwait\0" \
 	"ipaddr=192.168.0.156\0" \
 	"netmask=255.255.255.0\0" \
 	"gatewayip=192.168.0.1\0" \
 	"serverip=192.168.0.101\0" \
-	"autoconf=off\0" \
+	"autoconf=dhcp\0" \
 	"loadaddr=0x50018000\0" \
-	"bootfile=uImage\0" \
-	"uboot_image=u-boot.real6410\0" \
-	"initrd_image=initrd.img\0" \
+	"kernelfile=uImage-3.2.52-real6410\0" \
+	"initrdfile=uInitrd-3.2.52-real6410\0" \
 	"initrd_addr=0x51000000\0" \
 	"initrd_high=0xffffffff\0" \
-	"nfsboot=run nfsargs; tftp ${loadaddr} ${bootfile} ; bootm\0" \
+	"ubootfile=u-boot.real6410\0" \
+	"nfsboot=run nfsargs; tftp ${loadaddr} ${kernelfile}; bootm\0" \
 	"nfsargs=setenv bootargs console=${console},${baudrate}n8 " \
-		"${optargs} video=${video} " \
-		"root=/dev/nfs nfsroot=${serverip}:${rootpath} " \
-		"ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:" \
-		"${hostname}:${device}:${autoconf}:${dns0}:${dns1}\0" \
+		"video=${video} ${optargs} root=/dev/nfs " \
+		"nfsroot=${serverip}:${rootpath} ip=${ipaddr}:${serverip}:" \
+		"${gatewayip}:${netmask}:${hostname}:${device}:${autoconf}\0" \
 	"rootpath=/home/niew/devel/wheezy-real6410\0" \
-	"nandboot=nand read ${loadaddr} 100000 3c0000 ; bootm\0" \
-	"nandargs=setenv bootargs console=${console},${baudrate}n8 " \
-		"${optargs} video=${video} root=${rootfs} " \
+	"mtdboot=run mtdargs; tftp ${initrd_addr} ${initrdfile}; " \
+		"tftp ${loadaddr} ${kernelfile}; bootm\0" \
+	"mtdargs=setenv bootargs console=${console},${baudrate}n8 " \
+		"video=${video} ${optargs} root=${rootfs} " \
 		"rootfstype=${rootfstype} mtdparts=${mtdparts}\0" \
 	"rootfs=/dev/mtdblock2\0" \
 	"rootfstype=jffs2\0" \
-	"mtdparts=nand:1m(uboot)ro,4m(kernel),-(rootfs)\0" \
-	"upgradecmd=tftp ${loadaddr} ${uboot_image} && " \
-		"setenv uboot_size $filesize ; " \
-		"nand erase 0 0x40000 && sleep 3 ; " \
-		"nand write ${loadaddr} 0 0x40000 && sleep 3 ; " \
-		"nand read 0x52008000 0 ${uboot_size} ; " \
-		"cmp.b $fileaddr 0x52008000 ${uboot_size} ; echo ; " \
+	"mtdparts=nand:1m(uboot)ro,2m(kernel),-(rootfs)\0" \
+	"upgradecmd=tftp ${loadaddr} ${ubootfile} && " \
+		"setenv ubootsize $filesize; " \
+		"nand erase 0 0x40000 && sleep 3; " \
+		"nand write ${loadaddr} 0 0x40000 && sleep 3; " \
+		"nand read 0x52008000 0 ${ubootsize}; " \
+		"cmp.b $fileaddr 0x52008000 ${ubootsize}; echo; " \
 		"echo U-Boot upgraded. Please reset the board manually!\0"
 #endif	/* __CONFIG_H */
