@@ -357,7 +357,6 @@
 #define CFG_MAX_NAND_DEVICE     1
 #define CFG_NAND_BASE           0x70200010
 #define NAND_MAX_CHIPS          1
-#define CFG_NAND_LARGEPAGE_SAVEENV
 /*#define CFG_NAND_HWECC*/
 /*#define CFG_NAND_FLASH_BBT*/
 /*#define CONFIG_NAND_BL1_8BIT_ECC*/
@@ -397,6 +396,7 @@
 #define	CONFIG_NAND		1
 #define CONFIG_BOOT_NAND
 #define CFG_ENV_IS_IN_NAND
+#define CFG_NAND_LARGEPAGE_SAVEENV /* env_nand.c: Do _NOT_ disable this */
 /*#define CONFIG_BOOTCOMMAND	"nand read c0008000 40000 3c0000; bootm"*/
 #elif (CONFIG_BOOTCOMMAND & CFG_CMD_MOVINAND)
 #define CONFIG_MOVINAND		1
