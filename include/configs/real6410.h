@@ -36,9 +36,9 @@
  * High Level Configuration Options
  * (easy to change)
  */
-#define CONFIG_S3C6410		1		/* in a SAMSUNG S3C6410 SoC */
-#define CONFIG_S3C64XX		1		/* in a SAMSUNG S3C64XX Family  */
-#define CONFIG_SMDK6410		1		/* on a SAMSUNG SMDK6410 Board  */
+#define CONFIG_S3C6410		1		/* in a SAMSUNG S3C6410 SoC	*/
+#define CONFIG_S3C64XX		1		/* in a SAMSUNG S3C64XX Family	*/
+#define CONFIG_REAL6410		1		/* on a CoreWind REAL6410 Board	*/
 
 #define MEMORY_BASE_ADDRESS	0x50000000
 
@@ -52,7 +52,6 @@
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
-#define CONFIG_CMDLINE_EDITING
 
 /*
  * Architecture magic and machine type
@@ -76,10 +75,6 @@
 /*
  * Hardware drivers
  */
-
-/*
- * DM9000 Ethernet
- */
 #define CONFIG_DRIVER_DM9000    1	/* we have a DM9000 on-board	*/
 #define CONFIG_DM9000_BASE      0x18000300
 #define CONFIG_DM9000_USE_16BIT
@@ -95,6 +90,8 @@
 #ifdef CFG_HUSH_PARSER
 #define CFG_PROMPT_HUSH_PS2	"> "
 #endif
+
+#define CONFIG_CMDLINE_EDITING
 
 /***********************************************************
  * RTC
@@ -142,19 +139,19 @@
 /*
  * Miscellaneous configurable options
  */
-#define CFG_LONGHELP				/* undef to save memory		*/
-#define CFG_PROMPT		"U-Boot > "	/* Monitor Command Prompt	*/
-#define CFG_CBSIZE		256		/* Console I/O Buffer Size	*/
-#define CFG_PBSIZE	(CFG_CBSIZE+sizeof(CFG_PROMPT)+16)	/* Print Buffer Size	*/
-#define CFG_MAXARGS		16		/* max number of command args	*/
-#define CFG_BARGSIZE		CFG_CBSIZE	/* Boot Argument Buffer Size	*/
+#define CFG_LONGHELP			/* undef to save memory		*/
+#define CFG_PROMPT	"U-Boot > "	/* Monitor Command Prompt	*/
+#define CFG_CBSIZE	256		/* Console I/O Buffer Size	*/
+#define CFG_PBSIZE (CFG_CBSIZE+sizeof(CFG_PROMPT)+16)	/* Print Buffer Size	*/
+#define CFG_MAXARGS	16		/* max number of command args	*/
+#define CFG_BARGSIZE	CFG_CBSIZE	/* Boot Argument Buffer Size	*/
 
-#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS		/* memtest works on	*/
-#define CFG_MEMTEST_END	(MEMORY_BASE_ADDRESS + 0x7e00000)	/* 126 MB in DRAM	*/
+#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS	/* memtest works on	*/
+#define CFG_MEMTEST_END	(MEMORY_BASE_ADDRESS+0x7e00000)	/* 126 MB in DRAM	*/
 
 #define CFG_LOAD_ADDR		MEMORY_BASE_ADDRESS	/* default load address	*/
 
-#undef CFG_CLKS_IN_HZ		/* everything, incl board info, in Hz */
+#undef CFG_CLKS_IN_HZ			/* everything, incl board info, in Hz */
 
 /* the PWM TImer 4 uses a counter of 15625 for 10 ms, so we need */
 /* it to wrap 100 times (total 1562500) to get 1 sec. */
@@ -174,52 +171,49 @@
 #define CONFIG_STACKSIZE_FIQ	(4 * 1024)	/* FIQ stack */
 #endif
 
-//#define CONFIG_CLK_800_133_66
-//#define CONFIG_CLK_666_133_66
+/*
+#define CONFIG_CLK_800_133_66
+#define CONFIG_CLK_666_133_66
+*/
 #define CONFIG_CLK_532_133_66
-//#define CONFIG_CLK_400_133_66
-//#define CONFIG_CLK_400_100_50
-//#define CONFIG_CLK_OTHERS
-
-//#define CONFIG_CLKSRC_CLKUART
+/*
+#define CONFIG_CLK_400_133_66
+#define CONFIG_CLK_400_100_50
+#define CONFIG_CLK_OTHERS
+*/
 
 #define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | pdiv<<8 | sdiv)
 
-#if defined(CONFIG_CLK_666_133_66) /* FIN 12MHz, Fout 666MHz */
+#if defined(CONFIG_CLK_666_133_66)	/* FIN 12MHz, Fout 666MHz */
 #define APLL_MDIV	333
 #define APLL_PDIV	3
 #define APLL_SDIV	1
-#undef  CONFIG_SYNC_MODE /* ASYNC MODE */
-
-#elif defined(CONFIG_CLK_532_133_66) /* FIN 12MHz, Fout 532MHz */
+#undef  CONFIG_SYNC_MODE		/* ASYNC mode */
+#elif defined(CONFIG_CLK_532_133_66)	/* FIN 12MHz, Fout 532MHz */
 #define APLL_MDIV	266
 #define APLL_PDIV	3
 #define APLL_SDIV	1
-#define CONFIG_SYNC_MODE
-
-#elif defined(CONFIG_CLK_400_133_66) || defined(CONFIG_CLK_800_133_66) /* FIN 12MHz, Fout 800MHz */
+#define CONFIG_SYNC_MODE		/* SYNC mode */
+#elif defined(CONFIG_CLK_400_133_66) || defined(CONFIG_CLK_800_133_66)	/* FIN 12MHz, Fout 800MHz */
 #define APLL_MDIV	400
 #define APLL_PDIV	3
 #define APLL_SDIV	1
-#define CONFIG_SYNC_MODE
-
-#elif defined(CONFIG_CLK_400_100_50) /* FIN 12MHz, Fout 400MHz */
+#define CONFIG_SYNC_MODE		/* SYNC mode */
+#elif defined(CONFIG_CLK_400_100_50)	/* FIN 12MHz, Fout 400MHz */
 #define APLL_MDIV	400
 #define APLL_PDIV	3
 #define APLL_SDIV	2
-#define CONFIG_SYNC_MODE
-
-#elif defined(CONFIG_CLK_OTHERS)
-/*If you have to use another value, please define pll value here*/
-/* FIN 12MHz, Fout 532MHz */
+#define CONFIG_SYNC_MODE		/* SYNC mode */
+#elif defined(CONFIG_CLK_OTHERS)	/* Others PLL value, please define here */
 #define APLL_MDIV	266
 #define APLL_PDIV	3
 #define APLL_SDIV	1
 #define CONFIG_SYNC_MODE
-
 #else
 #error "Not Support Fequency or Mode!! you have to setup right configuration."
 #endif
+
+/*#define CONFIG_CLKSRC_CLKUART*/
 
 #define CONFIG_UART_66	/* default clock value of CLK_UART */
 
@@ -343,7 +337,7 @@
 #define CFG_ENV_OFFSET		0x3c000	/* Must be? set to 0x3c000 */
 
 /*
- * REAL6400 board specific data
+ * REAL6410 board specific data
  */
 #define CONFIG_IDENT_STRING	" for REAL6410"
 
@@ -352,20 +346,21 @@
 
 /* base address for uboot */
 #ifdef CONFIG_ENABLE_MMU
-#define CFG_UBOOT_BASE		(0xc7e00000)
+#define CFG_UBOOT_BASE		0xc7e00000
 #else
-#define CFG_UBOOT_BASE		(0x57e00000)
+#define CFG_UBOOT_BASE		0x57e00000
 #endif
 #define CFG_PHY_UBOOT_BASE	(MEMORY_BASE_ADDRESS + 0x7e00000)
 
 /* NAND configuration */
+#if (CONFIG_COMMANDS & CFG_CMD_NAND)
 #define CFG_MAX_NAND_DEVICE     1
-#define CFG_NAND_BASE           (0x70200010)
+#define CFG_NAND_BASE           0x70200010
 #define NAND_MAX_CHIPS          1
-//#define CFG_NAND_HWECC
 #define CFG_NAND_LARGEPAGE_SAVEENV
-/*#define CONFIG_NAND_BL1_8BIT_ECC*/
+/*#define CFG_NAND_HWECC*/
 /*#define CFG_NAND_FLASH_BBT*/
+/*#define CONFIG_NAND_BL1_8BIT_ECC*/
 
 #define NAND_DISABLE_CE()	(NFCONT_REG |= (1 << 1))
 #define NAND_ENABLE_CE()	(NFCONT_REG &= ~(1 << 1))
@@ -377,16 +372,19 @@
 
 #define CONFIG_MTD_NAND_VERIFY_WRITE    1
 #define CONFIG_MTD_NAND_ECC_JFFS2       1
+#endif /* CONFIG_COMMANDS & CFG_CMD_NAND */
 
 /* MMC configuration */
 #if (CONFIG_COMMANDS & CFG_CMD_MMC)
-#define CFG_MMC_BASE		(0xf0000000)
+#define CFG_MMC_BASE		0xf0000000
 #define CFG_MAX_MMC_DEVICE	1
 #endif
 
 /* OneNAND configuration */
-#define CFG_ONENAND_BASE 	(0x70100000)
+#if (CONFIG_COMMANDS & CFG_CMD_ONENAND)
+#define CFG_ONENAND_BASE 	0x70100000
 #define CFG_MAX_ONENAND_DEVICE	1
+#endif
 
 /*#define CONFIG_DOS_PARTITION*/
 /*#define CONFIG_SUPPORT_VFAT*/
@@ -405,7 +403,7 @@
 #define CONFIG_MMC		1
 #define CONFIG_BOOT_MOVINAND
 #define CFG_ENV_IS_IN_MOVINAND
-/*#define CONFIG_BOOTCOMMAND	"movi read zImage c0008000; bootm"*/
+/*#define CONFIG_BOOTCOMMAND	"movi read uImage c0008000; bootm"*/
 #elif (CONFIG_BOOTCOMMAND & CFG_CMD_ONENAND)
 #define CONFIG_ONENAND		1
 #define CONFIG_BOOT_ONENAND
