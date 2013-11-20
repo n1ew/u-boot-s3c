@@ -32,16 +32,6 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-/* Boot configuration (define only one of next 3) */
-/* Config in file 'boot_type.h' */
-/* This solution is NOT flexible, will be fix in future. */
-/*
- * #define CONFIG_BOOT_NAND
- * #define CONFIG_BOOT_MOVINAND
- * #define CONFIG_BOOT_ONENAND
- */
-#include "boot_type.h"
-
 /*
  * High Level Configuration Options
  * (easy to change)
@@ -62,6 +52,7 @@
 #define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_CMDLINE_TAG
 #define CONFIG_INITRD_TAG
+#define CONFIG_CMDLINE_EDITING
 
 /*
  * Architecture magic and machine type
@@ -103,12 +94,6 @@
 #define CFG_HUSH_PARSER			/* use "hush" command parser	*/
 #ifdef CFG_HUSH_PARSER
 #define CFG_PROMPT_HUSH_PS2	"> "
-#endif
-
-#if defined(CONFIG_AUTO_COMPLETE)
-#undef CONFIG_CMDLINE_EDITING		/* AUTO_COMPLETE not work if enabled */
-#else
-#define CONFIG_CMDLINE_EDITING		/* fallback */
 #endif
 
 /***********************************************************
@@ -394,35 +379,40 @@
 #define CONFIG_MTD_NAND_ECC_JFFS2       1
 
 /* MMC configuration */
+#if (CONFIG_COMMANDS & CFG_CMD_MMC)
 #define CFG_MMC_BASE		(0xf0000000)
 #define CFG_MAX_MMC_DEVICE	1
+#endif
 
 /* OneNAND configuration */
 /*#define CFG_ONENAND_BASE 	(0x70100000)*/
 /*#define CFG_MAX_ONENAND_DEVICE	1*/
 
-//#define CONFIG_DOS_PARTITION
-//#define CONFIG_SUPPORT_VFAT
+/*#define CONFIG_DOS_PARTITION*/
+/*#define CONFIG_SUPPORT_VFAT*/
 
-//#define CONFIG_USB_OHCI
-//#define CONFIG_USB_STORAGE
+/*#define CONFIG_USB_OHCI*/
+/*#define CONFIG_USB_STORAGE*/
 
 /* Settings boot configuration */
-#if defined(CONFIG_BOOT_NAND)
+#if (CONFIG_COMMANDS & CFG_CMD_NAND)
 #define	CONFIG_NAND		1
+#define CONFIG_BOOT_NAND
 #define CFG_ENV_IS_IN_NAND
-/*#define CONFIG_BOOTCOMMAND	"nand read c0008000 40000 3c0000 ; bootm c0008000"*/
-#elif defined(CONFIG_BOOT_MOVINAND)
+/*#define CONFIG_BOOTCOMMAND	"nand read c0008000 40000 3c0000; bootm"*/
+#elif (CONFIG_BOOTCOMMAND & CFG_CMD_MOVINAND)
 #define CONFIG_MOVINAND		1
 #define CONFIG_MMC		1
+#define CONFIG_BOOT_MOVINAND
 #define CFG_ENV_IS_IN_MOVINAND
-/*#define CONFIG_BOOTCOMMAND	"movi read zImage c0008000 ; bootm c0008000"*/
-#elif defined(CONFIG_BOOT_ONENAND)
+/*#define CONFIG_BOOTCOMMAND	"movi read zImage c0008000; bootm"*/
+#elif (CONFIG_BOOTCOMMAND & CFG_CMD_ONENAND)
 #define CONFIG_ONENAND		1
+#define CONFIG_BOOT_ONENAND
 #define CFG_ENV_IS_IN_ONENAND
-/*#define CONFIG_BOOTCOMMAND	"onenand read c0008000 40000 1c0000 ; bootm c0008000"*/
+/*#define CONFIG_BOOTCOMMAND	"onenand read c0008000 40000 1c0000; bootm"*/
 #else
-# error Define one of CONFIG_BOOT_{NAND | MOVINAND | ONENAND}
+# error Define one of CFG_CMD_{NAND | MOVINAND | ONENAND}
 #endif
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
