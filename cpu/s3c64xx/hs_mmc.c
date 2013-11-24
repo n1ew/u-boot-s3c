@@ -1,7 +1,5 @@
 #include <common.h>
 
-#if defined(CONFIG_SMDK6400) || defined(CONFIG_SMDK6410) || defined(CONFIG_SMDK6430)
-
 #define CONFIG_SUPPORT_MMC_PLUS
 #define HCLK_OPERATION
 #undef DEBUG_HSMMC
@@ -21,12 +19,14 @@
 
 #include "hs_mmc.h"
 
-#if defined(CONFIG_S3C6400)
+#if defined(CONFIG_SMDK6400)
 extern ulong virt_to_phy_smdk6400(ulong addr);
-#elif defined(CONFIG_S3C6410)
+#elif defined(CONFIG_SMDK6410)
 extern ulong virt_to_phy_smdk6410(ulong addr);
-#elif defined(CONFIG_S3C6430)
+#elif defined(CONFIG_SMDK6430)
 extern ulong virt_to_phy_smdk6430(ulong addr);
+#elif defined(CONFIG_REAL6410)
+extern ulong virt_to_phy_real6410(ulong addr);
 #endif
 
 #define SDI_Tx_buffer_HSMMC		(0x51000000)
@@ -1348,5 +1348,3 @@ void test_hsmmc (uint width, uint test, uint start_blk, uint blknum)
 	write_test(test, start_blk, blknum);
 	read_test(test, start_blk, blknum);
 }
-
-#endif
