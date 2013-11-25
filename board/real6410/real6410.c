@@ -82,7 +82,7 @@ int dram_init(void)
 #ifdef CONFIG_DISPLAY_BOARDINFO
 int checkboard(void)
 {
-	printf("Board:   REAL6410\n");
+	printf("Board: REAL6410\n");
 	return 0;
 }
 #endif
