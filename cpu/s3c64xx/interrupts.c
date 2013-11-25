@@ -39,7 +39,7 @@
 #include <asm/proc-armv/ptrace.h>
 #include <regs.h>
 
-int timer_load_val = 0;
+static ulong timer_load_val;
 
 /* macro to read the 16 bit timer */
 static inline ulong READ_TIMER(void)
