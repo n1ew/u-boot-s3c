@@ -98,15 +98,3 @@ ulong virt_to_phy_real6410(ulong addr)
 	return addr;
 }
 #endif
-
-#if (CONFIG_COMMANDS & CFG_CMD_NAND) && defined(CFG_NAND_LEGACY)
-#include <linux/mtd/nand.h>
-extern struct nand_chip nand_dev_desc[CFG_MAX_NAND_DEVICE];
-void nand_init(void)
-{
-	nand_probe(CFG_NAND_BASE);
-        if (nand_dev_desc[0].ChipID != NAND_ChipID_UNKNOWN) {
-                print_size(nand_dev_desc[0].totlen, "\n");
-        }
-}
-#endif
