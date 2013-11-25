@@ -44,7 +44,7 @@
 #include <devices.h>
 #include <version.h>
 #include <net.h>
-#if defined(CONFIG_BOOT_MOVINAND)
+#if (CONFIG_COMMANDS & CFG_CMD_MOVINAND)
 #include <movi.h>
 #endif
 
@@ -61,8 +61,8 @@ DECLARE_GLOBAL_DATA_PTR;
 void nand_init (void);
 #endif
 
-#ifdef CONFIG_ONENAND
-void onenand_init(void);
+#if (CONFIG_COMMANDS & CFG_CMD_ONENAND)
+void onenand_init (void);
 #endif
 
 ulong monitor_flash_len;
@@ -306,21 +306,18 @@ void start_armboot (void)
 	/* armboot_start is defined in the board-specific linker script */
 	mem_malloc_init (_armboot_start - CFG_MALLOC_LEN);
 
-#if defined(CONFIG_SMDK6400) || defined(CONFIG_SMDK6410) || defined(CONFIG_SMDK6430) || defined(CONFIG_SMDK2450) || defined(CONFIG_SMDK2416)
-
-#if defined(CONFIG_NAND)
-	puts ("NAND:    ");
+#if (CONFIG_COMMANDS & CFG_CMD_NAND)
+	puts ("NAND:  ");
 	nand_init();		/* go init the NAND */
 #endif
 
-#if defined(CONFIG_ONENAND)
+#if (CONFIG_COMMANDS & CFG_CMD_ONENAND)
 	puts ("OneNAND: ");
 	onenand_init();		/* go init the One-NAND */
 #endif
 
-#if defined(CONFIG_BOOT_MOVINAND)
+#if (CONFIG_COMMANDS & CFG_CMD_MOVINAND)
 	puts ("MMC:     ");
-
 	if ((0x24564236 == magic[0]) && (0x20764316 == magic[1])) {
 		printf("Boot up for burning\n");
 	} else {
@@ -328,15 +325,6 @@ void start_armboot (void)
 		movi_set_ofs(MOVI_TOTAL_BLKCNT);
 		movi_init();
 	}
-#endif
-
-#else
-
-#if (CONFIG_COMMANDS & CFG_CMD_NAND)
-	puts ("NAND:  ");
-	nand_init();		/* go init the NAND */
-#endif
-
 #endif
 
 #ifdef CONFIG_HAS_DATAFLASH
